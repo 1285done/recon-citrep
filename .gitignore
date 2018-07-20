@@ -1,4 +1,5 @@
 *.zip
+mirror/
 mongodb-compass-1.14.6-win32-x64.exe
 eve_swagger_interface/
 node_modules/
