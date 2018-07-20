@@ -1,0 +1,163 @@
+{%include "headers.njk"%}
+
+<body>
+  {%include "navbar.njk"%}
+  <style>
+    @media (max-width: 576px) {
+      form {
+        max-width: 90%;
+      }
+    }
+
+    @media (min-width: 768px) {
+      form {
+        max-width: 40%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      form {
+        max-width: 60%;
+      }
+    }
+
+    body {
+      background-image: url("space.jpg");
+      background-size: 100% 100%;
+    }
+
+    label {
+      color: #FFFFFF;
+    }
+
+    h3 {
+      color: #FFFFFF;
+    }
+
+    .alert {
+      width: 40%;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 0px;
+      box-shaddow: 0 0 10px 2px;
+    }
+  </style>
+  <div class="container">
+    <div class="row">
+      <div id="yeet" class="col-md-12">
+
+        <form id="submitForm" class="d-block mx-auto my-5">
+          <h3 class="text-center">Report a Citadel</h3>
+
+          <div class="form-group">
+            <label for="system">System: (required)</label>
+            <input type="text" id="system" name="system" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="cittype">Citadel Type: (required)</label>
+            <select name='type' class="form-control" id="cittype">
+              <option value="Astrahus">Astrahus</option>
+              <option value="Fortizar">Fortizar</option>
+              <option value="Faction_Fortizar">Faction Fortizar</option>
+              <option value="Keepstar">Keepstar</option>
+              <option value="Athanor">Athanor</option>
+              <option value="Tatara">Tatara</option>
+              <option value="Raitaru">Raitaru</option>
+              <option value="Azbel">Azbel</option>
+              <option value="Sotyio">Sotyio</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="citname">Citadel Name: (required)</label>
+            <input type='text' name='citname' class="form-control" id="citname" required>
+          </div>
+          <div class="form-group">
+            <label for="corp">Corp Owner: (required)</label>
+            <input type='text' name='corp' class="form-control" id="corp" required>
+          </div>
+          <div class="form-group">
+            <label for="alliance">Alliance Owner: </label>
+            <input type='text' name='alliance' class="form-control" id="alliance">
+          </div>
+          <div class="form-group">
+            <label for="power">Power: (required)</label>
+            <select name='power' class="form-control" id="power">
+              <option value="High">High</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fit">Fitting: </label>
+            <input type='text' name='fit' class="form-control" id="fit">
+          </div>
+          <div class="form-group">
+									<label for="vulnday">Vuln Day:</label>
+									<select name='vulnday' class="form-control" id="vulnday">
+									<option value=""></option>
+									<option value="Sunday">Sunday</option>
+									<option value="Monday">Monday</option>
+									<option value="Tuesday">Tuesday</option>
+									<option value="Wednesday">Wednesday</option>
+									<option value="Thursday">Thursday</option>
+									<option value="Friday">Friday</option>
+									<option value="Saturday">Saturday</option>
+									</select>
+								</div>
+                <div class="form-group">
+									<label for="vulnhour">Vuln Hour:</label>
+									<select name='vulnhour' class="form-control" id="vulnhour">
+									<option value=""></option>
+									{%for i in range(0, 24)%}
+										<option value="{{i}}">{{i}}:00</option>
+									{%endfor%}
+									</select>
+									
+								</div>
+          <div class="form-group">
+            <label for="moondata">Moon Data: </label>
+            <select name='moondata' class="form-control" id="moondata">
+              <option value="None">None</option>
+              <option value="R4">R4</option>
+              <option value="R8">R8</option>
+              <option value="R16">R16</option>
+              <option value="R32">R32</option>
+              <option value="R64">R64</option>
+              <option value="Double R64">Double R64</option>
+
+            </select>
+          </div>
+          {%if user%}
+          <input type='submit' value='Submit' class="btn btn-success"> {%else%} {%endif%}
+          <input type='reset' value='Reset' class="btn btn-danger">
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+  <script>
+    /*
+     * This method stops the form from making
+     * A normal HTTP POST request
+     * #submitForm is the forms id=""
+     */
+    $("#submitForm").submit(function (event) {
+      event.preventDefault(); //prevent default action 
+      var form_data = $(this).serialize(); //Encode form elements for submission
+
+      $.ajax({
+        url: "/thank",
+        type: "POST",
+        data: form_data
+      }).done(function (response) { //
+
+        $(".alert").remove();
+       $("#yeet").prepend('<div role="alert" class="alert alert-success mt-5 mb-3"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span><strong>Alert</strong>text.</span></div>')
+       $('#submitForm').trigger("reset"); 
+      $("#system").focus()
+      window.scrollTo(0,0);
+      });
+    });
+  </script>
+</body>

@@ -1,0 +1,158 @@
+{%include "headers.njk"%} {%include "navbar.njk"%}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a role="tab" data-toggle="tab" href="#tab-1" class="nav-link active">Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a role="tab" data-toggle="tab" href="#tab-2" class="nav-link">Whitelist</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="tab-1">
+                        <div class="col">
+
+                            <button class="btn btn-dark my-2" onclick="openModalClear()">Add/Update User</button>
+
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Name</th>
+                                            <th>Alliance</th>
+                                            <th>Rank</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {%for permuser in elevatedUsers%}
+                                        <tr>
+                                            <td>
+                                                <img src="https://image.eveonline.com/Character/{{permuser.characterID}}_32.jpg"
+                                                />
+                                            </td>
+                                            <td>
+                                                <a href="#" id="{{permuser.characterID}}-name">{{permuser.name}}</a>
+                                            </td>
+                                            <td>
+                                                <a href="#">{{permuser.alliance.name}}</a>
+                                            </td>
+                                            <td>{{permuser.role.title}}</td>
+                                            <td>
+                                                <button class="btn btn-success btn-sm" type="button" onclick="updateUser('{{permuser.characterID}}')">
+                                                    <i class="fas fa-user-alt"></i>
+                                                    <i class="fas fa-arrow-up"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab-2">
+                        <div class="col">
+                            <form method="post" action="/admin/whitelist">
+                                <input name="alliance" type="text" class="form-control form-control d-inline mr-2" style="max-width:30%;" />
+                                <button class="btn btn-dark my-2" type="submit">Whitelist Alliance</button>
+                            </form>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>
+                                                <strong>Alliance</strong>
+                                                <br />
+                                            </th>
+                                            <th>Added By</th>
+                                            <th>Date</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {%for alliance in activeWhitelist%}
+                                        <tr>
+                                            <td>
+                                                <img src="https://image.eveonline.com/Alliance/{{alliance.id}}_32.png" />
+                                            </td>
+                                            <td>
+                                                <a href="#">{{alliance.name}}</a>
+                                            </td>
+                                            <td>
+                                                <a href="#">{{alliance.whitelistAdmin.name}}</a>
+                                            </td>
+                                            <td>{{alliance.createdAt}}</td>
+                                            <td>
+                                                <form method="post" action="/admin/whitelist/{{alliance._id}}">
+                                                    <button class="btn btn-danger btn-sm" type="submit">
+                                                        <i class="fas fa-times"></i> Revoke</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div role="dialog" tabindex="-1" class="modal fade" id="addUser">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-light">
+                <h4 class="modal-title">
+                    <i class="fas fa-user-plus"></i>Add/Update User</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/admin/user">
+                    <div class="form-group">
+                        <label for="pilotName">Pilot Name:</label>
+                        <input type="text" class="form-control" id="pilotName" name="pilotname" />
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select class="form-control" id="role" name="roleselect">
+                            <optgroup label="Special Access">
+                                <option value="1">1 - Search Access</option>
+                                <option value="2">2 - Unused</option>
+                                <option value="3">3 - Operations</option>
+                                <option value="4">4 - Recon/Coord</option>
+                            </optgroup>
+                            <optgroup label="Revoke Access">
+                                <option value="0">0 - Submit only</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <button class="btn btn-dark float-right" type="submit">
+                        <i class="fas fa-check-circle"></i>Add/Update User</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function updateUser(characterID) {
+        let pilotName = $("#" + characterID + "-name").text();
+        $("#pilotName").val(pilotName);
+        $('#addUser').modal('toggle');
+    }
+</script>
+<script>
+    function openModalClear() {
+        $("#pilotName").val('');
+        $('#addUser').modal('toggle');
+    }
+</script>

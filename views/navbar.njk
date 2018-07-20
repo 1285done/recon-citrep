@@ -1,0 +1,61 @@
+<nav class="navbar navbar-dark navbar-expand-md bg-dark">
+	<div class="container-fluid">
+		<a href="/" class="navbar-brand">Project Citrep</a>
+		<button data-toggle="collapse" data-target="#navcol-2" class="navbar-toggler">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navcol-2">
+			<ul class="nav navbar-nav">
+				<li role="presentation" class="nav-item">
+					{%if report%}
+					<a href="/form" class="nav-link active">Report</a>
+					{%else%}
+					<a href="/form" class="nav-link">Report</a>
+					{%endif%}
+				</li>
+				{%if user.role.numeric > 0%}
+				<li role="presentation" class="nav-item">
+					{%if search%}
+					<a href="/search" class="nav-link active">Search</a>
+					{%else%}
+					<a href="/search" class="nav-link">Search</a>
+					{%endif%}
+				</li>
+				{%endif%} 
+				{%if user.role.numeric > 4%}
+				<li role="presentation" class="nav-item">
+					{%if userman%}
+					<a href="/userman" class="nav-link active">User Management</a>
+					{%else%}
+					<a href="/userman" class="nav-link">User Management</a>
+					{%endif%}
+				</li>
+				{%endif%}
+
+			</ul>
+		</div>
+		<div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+			<ul class="nav navbar-nav">
+				{%if not user%}
+				<li role="presentation" class="nav-item navbar-right">
+					<form class="nav-item navbar-right" action="/auth/eveonline" method="get">
+						<button class="btn-link" type="submit">
+							<img src="/login.png">
+						</button>
+					</form>
+				</li>
+				{%else%}
+				<li role="presentation" class="nav-item navbar-right">
+					<p class="navbar-text">{{user.name}}</p>
+				</li>
+				{%endif%} 
+				{%if user%}
+				<li role="presentation" class="nav-item navbar-right">
+					<a href="/logout" class="nav-link">Logout</a>
+				</li>
+				{%endif%}
+			</ul>
+		</div>
+	</div>
+</nav>
