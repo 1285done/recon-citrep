@@ -54,5 +54,6 @@ router.get('/fa.css', function (req, res) {
 
 //Search
 router.post('/citadel/:citadelid', search_controller.getDetails);
+router.post('/update', search_controller.updateCitadel);
 
 module.exports = router;

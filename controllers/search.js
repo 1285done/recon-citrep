@@ -148,6 +148,7 @@ exports.search = function (req, res) {
 	//console.log(results)
 	//Print out the search boxes again, along with the found data.
 	res.render('search.html', {
+		query: req.body,
 		results: results,
 		search: true,
 		user: req.user
@@ -161,9 +162,14 @@ exports.getDetails = function(req, res){
 		if(result === undefined){
 			res.send(404)
 		}else{
-			console.log(result)
+			//console.log(result)
 			res.send(result)
 		}
 	})
 	
+}
+
+exports.updateCitadel= function(req, res){
+	console.log(req.body)
+	res.redirect("/search")
 }

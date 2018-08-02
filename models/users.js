@@ -12,7 +12,7 @@ module.exports = function (setup) {
     module.findOrCreateUser = function (users, refreshToken, characterDetails, cb) {
         //Update the users refresh token
         if (refreshToken) {
-            console.log(characterDetails)
+            //console.log(characterDetails)
             db.updateOne({
                 characterID: characterDetails.characterID
             }, {

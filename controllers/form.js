@@ -23,18 +23,18 @@ exports.submitted = function (req, res) {
 		reply = "Thank you for submitting this citadel.";
 		esi.solarSystems.search(req.body.system).then(result => {
 			//System Name -> System ID
-			console.log(result);
+			//console.log(result);
 			//Switch to swagger API because eve-swagger is using out-of-date endpoints.
 			universeapi.getUniverseSystemsSystemId(result[0], '', function (err, data, res1) {
 				//System ID -> Constellation ID
-				console.log(data.constellation_id);
+				//console.log(data.constellation_id);
 				universeapi.getUniverseConstellationsConstellationId(data.constellation_id, '', function (err, data2, res2) {
 					//Constellation ID -> Region ID + Constellation Name
-					console.log(data2.name);
-					console.log(data2.region_id);
+					//console.log(data2.name);
+					//console.log(data2.region_id);
 					universeapi.getUniverseRegionsRegionId(data2.region_id, '', function (err, data3, res3) {
 						//Region ID -> Region Name
-						console.log(data3.name);
+						//console.log(data3.name);
 						CitadelObject.region = data3.name;
 						CitadelObject.constellation = data2.name;
 						CitadelObject.system = data.name.toUpperCase();

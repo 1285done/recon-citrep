@@ -2,6 +2,7 @@
 
 <body>
 	{%include "navbar.njk"%}
+	{%if user.role.numeric > 0%}
 	<div class="container">
 		<div class="row">
 			<button class="btn btn-primary my-2" data-toggle="modal" data-target="#search" accesskey="s">Search</button>
@@ -182,6 +183,7 @@
 			</div>
 		</div>
 	</div>
+	{%endif%}
 </body>
 
 
@@ -195,86 +197,106 @@
          </button>
       </div>
       <div class="modal-body">
+	  <form id="modalform" action = "/update" method = "post">
          <div class="row">
             <div class="col-lg-4 col-md-6">
                <div class="form-group">
                   <label for="modalname">Name:</label>
                   <!--<p id='modalname'></p>-->
-                  <input id="modalname" class="form-control" type="text" readonly>
+                  <input id="modalname" name="modalname" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
                </div>
             </div>
-            <div class="col-lg-4 col-md-6">
+			<div class="col-lg-4 col-md-6">
                <div class="form-group">
-                  <label for="modaltype">Type:</label>
-                  <p id='modaltype'></p>
+                  <label for="modalcorp">Corp:</label>
+                  <input id="modalcorp" name="modalcorp" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
                </div>
             </div>
             <div class="col-lg-4 col-md-6">
                <div class="form-group">
                   <label for="modalalliance">Alliance:</label>
-                  <p id='modalalliance'></p>
+                  <input id="modalalliance" name="modalalliance" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
                </div>
             </div>
-            <div class="col-lg-4 col-md-6">
+			<div class="col-lg-4 col-md-6">
                <div class="form-group">
-                  <label for="modalcorp">Corp:</label>
-                  <p id='modalcorp'></p>
+                  <label for="modalsystem">System:</label>
+                  <input id="modalsystem" name="modalsystem" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
                </div>
             </div>
             <div class="col-lg-4 col-md-6">
                <div class="form-group">
                   <label for="modalregion">Region:</label>
-                  <p id='modalregion'></p>
+                  <input id="modalregion" name="modalregion" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
                </div>
             </div>
             <div class="col-lg-4 col-md-6">
                <div class="form-group">
                   <label for="modalconstellation">Constallation:</label>
-                  <p id='modalconstellation'></p>
+                  <input id="modalconstellation" name="modalconstellation" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
                </div>
             </div>
             <div class="col-lg-4 col-md-6">
                <div class="form-group">
-                  <label for="modalsystem">System:</label>
-                  <p id='modalsystem'></p>
+                  <label for="modaltype">Type:</label>
+				  <input id="modaltype" name="modaltype" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
                </div>
             </div>
             <div class="col-lg-4 col-md-6">
                <div class="form-group">
                   <label for="modalpower">Power:</label>
-                  <p id='modalpower'></p>
+                  <input id="modalpower" name="modalpower" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
                </div>
             </div>
             <div class="col-lg-4 col-md-6">
                <div class="form-group">
                   <label for="modalmoondata">Moon Data:</label>
-                  <p id='modalmoondata'></p>
+                  <input id="modalmoondata" name="modalmoondata" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
                </div>
             </div>
             <div class="col-lg-4 col-md-6">
                <div class="form-group">
                   <label for="modalfit">Fit:</label>
-                  <p id='modalfit'></p>
+                  <input id="modalfit" name="modalfit" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
                </div>
             </div>
             <div class="col-lg-4 col-md-6">
                <div class="form-group">
                   <label for="modalvuln">Vulnerability:</label>
-                  <p id='modalvuln'></p>
+                  <input id="modalvuln" name="modalvuln" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
                </div>
             </div>
             <div class="col-lg-4 col-md-6">
                <div class="form-group">
                   <label for="modalsubmitted">Date Submitted:</label>
-                  <p id='modalsubmitted'></p>
+                  <input id="modalsubmitted" name="modalsubmitted" class="form-control" type="text"  readonly >
                </div>
             </div>
-         </div>
-      </div>
+			{%if user.role.numeric > 2%}
+			<div class="col-lg-4 col-md-6">
+				<div class = "form-group">
+				<input type='hidden' name='searchquery' value='{{query}}'/>
+				<input type='submit' value='Update' class="btn btn-success">
+				</div>
+			</div>
+			{%endif%}
+		 </div>
+	  </form>
+	  </div>
    </div>
 </div>
 
 	<script>
+
+		$(document).ready(function(){
+			$('#modalform').ajaxForm();
+		})
+		$('#modalform').submit(function() {
+			$(this).ajaxSubmit();
+			$('#detailview').modal('hide');
+			return false;
+			
+		})
 		function openCitadelInfo(id) {
 			//Postpone until citadels are moved to database	
 			$.ajax({
@@ -282,20 +304,23 @@
 				type: "POST",
 				data: ""
 			}).done(function (response) {
-				console.log(response)
+				//console.log(response)
 				$('#detailview').modal('toggle');
-				$('#modalname').text(response.citname)
-				$('#modaltype').text(response.type)
-				$('#modalalliance').text(response.alliance)
-				$('#modalcorp').text(response.corp)
-				$('#modalregion').text(response.region)
-				$('#modalconstellation').text(response.constellation)
-				$('#modalsystem').text(response.system)
-				$('#modalpower').text(response.power)
-				$('#modalmoondata').text(response.moondata)
-				$('#modalfit').text(response.fit)
-				$('#modalvuln').text(response.vulnerability.day + " " + response.vulnerability.hour + ":00")
-				$('#modalsubmitted').text(response.lastSubmittedDate)
+				$('#modalname').val(response.citname)
+				$('#modaltype').val(response.type)
+				$('#modalalliance').val(response.alliance)
+				$('#modalcorp').val(response.corp)
+				$('#modalregion').val(response.region)
+				$('#modalconstellation').val(response.constellation)
+				$('#modalsystem').val(response.system)
+				$('#modalpower').val(response.power)
+				$('#modalmoondata').val(response.moondata)
+				$('#modalfit').val(response.fit)
+				$('#modalvuln').val(response.vulnerability.day + " " + response.vulnerability.hour + ":00")
+				$('#modalsubmitted').val(response.lastSubmittedDate)
 			});
 		}
+
+		
+
 	</script>

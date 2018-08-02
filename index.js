@@ -81,7 +81,7 @@ require('./dbHandler').connect(function () {
 		autoescape: true,
 		express: app
 	});
-	app.listen(settings.port, () => console.log('eve-goonscout-bookmarks: accepting connections on socket', settings.port));
+	app.listen(settings.port, () => console.log('Project Citrep: accepting connections on socket', settings.port));
 
 });
 
