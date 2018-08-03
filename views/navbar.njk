@@ -34,15 +34,12 @@
 				{%endif%}
 
 			</ul>
-
 			<ul class="nav navbar-nav ml-auto ">
 				{%if not user%}
 				<li role="presentation" class="nav-item navbar-right">
-					<form class="nav-item navbar-right" action="/auth/eveonline" method="get">
-						<button class="btn-link" type="submit">
-							<img src="/login.png">
-						</button>
-					</form>
+          <a class="btn-link" href="/auth/eveonline">
+            <img src="/login.png">
+          </a>
 				</li>
 				{%else%}
 				<li role="presentation" class="nav-item navbar-right">
