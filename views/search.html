@@ -1,5 +1,7 @@
 {%include "headers.njk"%}
-
+<style>
+.resultrow { cursor: pointer;}
+</style>
 <body>
 	{%include "navbar.njk"%}
 	{%if user.role.numeric > 0%}
@@ -169,7 +171,7 @@
 					</thead>
 					<tbody>
 						{% for citadel in results %}
-						<tr onclick="openCitadelInfo('{{citadel._id}}')">
+						<tr class='resultrow' onclick="openCitadelInfo('{{citadel._id}}')">
 							<td>{{ citadel.region }}</td>
 							<td>{{ citadel.system }}</td>
 							<td>{{ citadel.type }}</td>
@@ -275,7 +277,6 @@
 			{%if user.role.numeric > 2%}
 			<div class="col-lg-4 col-md-6">
 				<div class = "form-group">
-				<input type='hidden' name='searchquery' value='{{query}}'/>
 				<input type='submit' value='Update' class="btn btn-success">
 				</div>
 			</div>

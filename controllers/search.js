@@ -148,7 +148,6 @@ exports.search = function (req, res) {
 	//console.log(results)
 	//Print out the search boxes again, along with the found data.
 	res.render('search.html', {
-		query: req.body,
 		results: results,
 		search: true,
 		user: req.user
