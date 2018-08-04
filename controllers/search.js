@@ -170,5 +170,17 @@ exports.getDetails = function(req, res){
 
 exports.updateCitadel= function(req, res){
 	console.log(req.body)
-	res.redirect("/search")
+	//Hmm, I don't particularly like this, need to work on fitting/moon shit first imo
+	var citadelObject = {}
+	citadelObject.name = req.body.modalname
+	citadelObject.corp = req.body.modalcorp
+	citadelObject.alliance = req.body.modalalliance
+	citadelObject.fit = req.body.modalfit
+	citadelObject.moondata = req.body.modalmoondata
+	citadelObject.power = req.body.modalpower
+	citadelObject.lastSubmittedDate = new Date()
+	citadelObject.vulnerability = {
+		day: 0,
+		hour: 0
+	}
 }
