@@ -192,13 +192,28 @@
 <div role="dialog" tabindex="-1" class="modal fade" id="detailview">
 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
    <div class="modal-content">
+	<div>
+		
       <div class="modal-header bg-dark text-light">
          <h4 class="modal-title"><i class=""></i>Citadel Details</h4>
          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
          <span aria-hidden="true">×</span>
          </button>
       </div>
+	  <ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a role="tab" data-toggle="tab" href="#basic-tab" class="nav-link active">Basic Info</a>
+			</li>
+			<li class="nav-item">
+				<a role="tab" data-toggle="tab" href="#fitting-tab" class="nav-link">Fitting</a>
+			</li>
+			<li class="nav-item">
+				<a role="tab" data-toggle="tab" href="#moon-tab" class="nav-link">Moongoo</a>
+			</li>
+		</ul>
       <div class="modal-body">
+		<div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="basic-tab">
 	  <form id="modalform" action = "/update" method = "post">
          <div class="row">
             <div class="col-lg-4 col-md-6">
@@ -283,6 +298,23 @@
 			{%endif%}
 		 </div>
 	  </form>
+		</div>
+		<div role="tabpanel" class="tab-pane" id="fitting-tab">
+		<p>High Slots:</p>
+		<!-- High Slots-->
+		<p>Mid Slots:</p>
+		<!-- Mid Slots-->
+		<p>Low Slots:</p>
+		<!-- Low Slots-->
+		</div>
+		<div role="tabpanel" class="tab-pane" id="moon-tab">
+		<p>Moon Composition:</p>
+		<p>Value for 60d frack:</p>
+		<!-- Estimated value -->
+		</div>
+		</div>
+
+	  </div>
 	  </div>
    </div>
 </div>
@@ -316,6 +348,7 @@
 				$('#modalsystem').val(response.system)
 				$('#modalpower').val(response.power)
 				$('#modalmoondata').val(response.moondata)
+				$('#moondata').html("test")
 				$('#modalfit').val(response.fit)
 				$('#modalvuln').val(response.vulnerability.day + " " + response.vulnerability.hour + ":00")
 				$('#modalsubmitted').val(response.lastSubmittedDate)
