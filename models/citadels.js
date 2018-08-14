@@ -23,19 +23,7 @@ module.exports = function (setup) {
             constellation: citadelobject.constellation,
             system: citadelobject.system,
             power: citadelobject.power,
-            //[
-            //{
-            //ore:""
-            //percent:""
-            //},...
-            //]
-
             moondata: citadelobject.moondata,
-            //{
-            //    high:[],
-            //    mid:[],
-            //    low:[]
-            //}
             fit: citadelobject.fit,
             vulnerability: {
                 day: citadelobject.vulnday,
