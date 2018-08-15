@@ -84,17 +84,19 @@ exports.submitted = function (req, res) {
 							CitadelObject.moondata = []
 							var index = 0;
 							req.body.moondata.split("\n").forEach(function (element) {
-
+								
 								if (element.split("\t")[1] !== undefined) {
 									var split = element.split("\t")
 									//console.log(split)
-									CitadelObject.moondata[index] = {
-										"ore": split[1],
-										"amount": parseFloat(split[2] * 100).toFixed(2)
-									}
-									console.log(CitadelObject.moondata[index].ore + " : " + CitadelObject.moondata[index].amount)
+									universeapi.getUniverseTypesTypeId(split[3], "",function(error, data, res){
+										CitadelObject.moondata[index] = {
+											"ore": split[1],
+											"amount": parseFloat(split[2]),
+											"volume": data.volume
+										}
+										console.log(CitadelObject.moondata[index].ore + " : " + CitadelObject.moondata[index].amount)
 									index++;
-
+									})																
 								} else {}
 							});
 							//CitadelObject.moondata = req.body.moondata;

@@ -83,7 +83,7 @@
 											</select>
 										</div>
 									</div>
-									<div class="col col-lg-6 col-md-6 col-sm-12">
+									<!--<div class="col col-lg-6 col-md-6 col-sm-12">
 										<div class="form-group">
 											<label for="fit">Fitting: </label>
 											<input type='text' name='fit' class="form-control" id="fit">
@@ -104,7 +104,7 @@
 
 											</select>
 										</div>
-									</div>
+									</div>-->
 
 									<div class="col col-lg-6 col-md-6 col-sm-12">
 										<div class="form-group">
@@ -301,15 +301,21 @@
 		</div>
 		<div role="tabpanel" class="tab-pane" id="fitting-tab">
 		<p>High Slots:</p>
-		<!-- High Slots-->
+		<span id="modalhighs"></span>
 		<p>Mid Slots:</p>
-		<!-- Mid Slots-->
+		<span id="modalmids"></span>
 		<p>Low Slots:</p>
-		<!-- Low Slots-->
+		<span id="modallows"></span>
+		<p>Rigs:</p>
+		<span id="modalrigs"></span>
+		<p>Services:</p>
+		<span id="modalservices"></span>
 		</div>
 		<div role="tabpanel" class="tab-pane" id="moon-tab">
-		<p>Moon Composition:</p>
+		<label for="moondata">Moon Composition:</label>
+		<p id="moondata"></p>
 		<p>Value for 60d frack:</p>
+		<span id="moonvalue"></span>
 		<!-- Estimated value -->
 		</div>
 		</div>
@@ -348,7 +354,19 @@
 				$('#modalsystem').val(response.system)
 				$('#modalpower').val(response.power)
 				$('#modalmoondata').val(response.moondata)
-				$('#moondata').html("test")
+				//console.log(response)
+				var moongoo = "";
+				for(var i = 0; i < response.moondata.length; i++){
+					console.log(i)
+					moongoo += response.moondata[i].ore + ": " + parseFloat(response.moondata[i].amount * 100).toFixed(2)+"<br />"
+				}
+				$('#moondata').html(moongoo)
+				var volumeofore = 1344 * 20000; //56d * 20km3/h
+				var arrayofores = new Array(response.moondata.length)
+				for(var index = 0; index < arrayofores.length; index++){
+					arrayofores[index] = parseFloat((parseFloat(response.moondata[index].amount * volumeofore).toFixed(0))/response.moondata[index].volume).toFixed(0)
+				}
+				console.log(arrayofores)
 				$('#modalfit').val(response.fit)
 				$('#modalvuln').val(response.vulnerability.day + " " + response.vulnerability.hour + ":00")
 				$('#modalsubmitted').val(response.lastSubmittedDate)
