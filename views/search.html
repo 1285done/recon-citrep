@@ -4,6 +4,9 @@
 .table-responsive {
     overflow-x: hidden;
 }
+.moon-hidden {
+	display: none;
+}
 </style>
 <body>
 	{%include "navbar.njk"%}
@@ -211,7 +214,7 @@
 				<a role="tab" data-toggle="tab" href="#fitting-tab" class="nav-link">Fitting</a>
 			</li>
 			<li class="nav-item">
-				<a role="tab" data-toggle="tab" href="#moon-tab" class="nav-link">Moongoo</a>
+				<a role="tab" id="moontabtab" data-toggle="tab" href="#moon-tab" class="nav-link">Moongoo</a>
 			</li>
 		</ul>
       <div class="modal-body">
@@ -292,15 +295,15 @@
 		</div>
 		<div role="tabpanel" class="tab-pane" id="fitting-tab">
 		<p>High Slots:</p>
-		<span id="modalhighs"></span>
+		<span id="high"></span>
 		<p>Mid Slots:</p>
-		<span id="modalmids"></span>
+		<span id="mid"></span>
 		<p>Low Slots:</p>
-		<span id="modallows"></span>
+		<span id="low"></span>
 		<p>Rigs:</p>
-		<span id="modalrigs"></span>
+		<span id="rig"></span>
 		<p>Services:</p>
-		<span id="modalservices"></span>
+		<span id="service"></span>
 		</div>
 		<div role="tabpanel" class="tab-pane" id="moon-tab">
 		<label for="moondata">Moon Composition:</label>
@@ -352,23 +355,45 @@
 				$('#modalpower').val(response.power)
 				$('#modalmoondata').val(response.moondata)
 				//console.log(response)
-				var moongoo = "";
-				for(var i = 0; i < response.moondata.length; i++){
-					console.log(i)
-					moongoo += response.moondata[i].ore + ": " + parseFloat(response.moondata[i].amount * 100).toFixed(2)+"%<br />"
-				}
-				$('#moondata').html(moongoo)
+				
 				
 				//HERE
 				//ajax get  -> ore volume
 			
 				//console.log(datastring)
 				if(response.type == "Athanor" || response.type == "Tatara"){
+					$('#moontabtab').removeClass('moon-hidden')
+					var moongoo = "";
+				for(var i = 0; i < response.moondata.length; i++){
+					console.log(i)
+					moongoo += response.moondata[i].ore + ": " + parseFloat(response.moondata[i].amount * 100).toFixed(2)+"%<br />"
+				}
+				$('#moondata').html(moongoo)
 					getDataString(response.moondata)
+				}else{
+					$('#moontabtab').addClass('moon-hidden')
 				}
 				
 				//console.log(arrayofores)
-				$('#modalfit').val(response.fit)
+
+				for (var property in response.fit) {
+    				if (response.fit.hasOwnProperty(property)) {
+        				var string= ""
+						var counter = 0;
+						//console.log(response.fit[property])
+						response.fit[property].forEach(slot => {
+							string += slot + "<br />"
+							counter++
+							if(counter == response.fit[property].length){
+								console.log(`${property}`)
+								console.log(string)
+								$(`#${property}`).html(string)
+								counter = 0;
+								string = ""
+							}
+						})
+    				}
+				}
 				$('#modalvuln').val(response.vulnerability.day + " " + response.vulnerability.hour + ":00")
 				$('#modalsubmitted').val(response.lastSubmittedDate)
 			});
