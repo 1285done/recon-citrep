@@ -314,7 +314,7 @@
 		<div role="tabpanel" class="tab-pane" id="moon-tab">
 		<label for="moondata">Moon Composition:</label>
 		<p id="moondata"></p>
-		<p>Value for 60d frack:</p>
+		<p>Value for 56d frack (Value may be extremely inaccurate due to lack of ore in jita):</p>
 		<span id="moonvalue"></span>
 		<!-- Estimated value -->
 		</div>
@@ -358,19 +358,55 @@
 				var moongoo = "";
 				for(var i = 0; i < response.moondata.length; i++){
 					console.log(i)
-					moongoo += response.moondata[i].ore + ": " + parseFloat(response.moondata[i].amount * 100).toFixed(2)+"<br />"
+					moongoo += response.moondata[i].ore + ": " + parseFloat(response.moondata[i].amount * 100).toFixed(2)+"%<br />"
 				}
 				$('#moondata').html(moongoo)
-				var volumeofore = 1344 * 20000; //56d * 20km3/h
-				var arrayofores = new Array(response.moondata.length)
-				for(var index = 0; index < arrayofores.length; index++){
-					arrayofores[index] = parseFloat((parseFloat(response.moondata[index].amount * volumeofore).toFixed(0))/response.moondata[index].volume).toFixed(0)
-				}
-				console.log(arrayofores)
+				
+				//HERE
+				//ajax get  -> ore volume
+			
+				//console.log(datastring)
+				getDataString(response.moondata)
+				//console.log(arrayofores)
 				$('#modalfit').val(response.fit)
 				$('#modalvuln').val(response.vulnerability.day + " " + response.vulnerability.hour + ":00")
 				$('#modalsubmitted').val(response.lastSubmittedDate)
 			});
+		}
+		function getDataString(moondata){
+			console.log(moondata)
+			var volumeofore = 1344 * 20000; //56d * 20km3/h
+				var arrayofores = []
+				var datastring = ""
+				var counter = 0;
+				moondata.forEach(moon => {
+					$.ajax({
+						url: "https://esi.evetech.net/latest/universe/types/"+moon.id+"/?datasource=tranquility&language=en-us",
+						type: "GET"
+					}).done(function(response1){
+						arrayofores.push({ore: moon.ore, amount: parseFloat((parseFloat(moon.amount * volumeofore).toFixed(0))/response1.volume).toFixed(0)});
+						datastring += moon.ore + " " + parseFloat((parseFloat(moon.amount * volumeofore).toFixed(0))/response1.volume).toFixed(0) + "\n"
+						counter++
+						if(counter == moondata.length){
+						console.log("FUCK" + datastring)
+						getEvePraisal(datastring)
+					} 
+					})
+					
+					
+					
+				})
+				//return datastring
+		}
+		function getEvePraisal(data){
+				$.ajax({
+					url:"https://evepraisal.com/appraisal.json?market=jita&persist=no",
+					method:"POST",
+					data: data
+				}).done(function(evepraisal){
+					console.log(evepraisal)
+					$("#moonvalue").html((evepraisal.appraisal.totals.sell).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + " isk")
+				})
 		}
 
 		
