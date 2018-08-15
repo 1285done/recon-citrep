@@ -1,6 +1,9 @@
 {%include "headers.njk"%}
 <style>
 .resultrow { cursor: pointer;}
+.table-responsive {
+    overflow-x: hidden;
+}
 </style>
 <body>
 	{%include "navbar.njk"%}
@@ -158,7 +161,7 @@
 				</div>
 			</div>
 			<div class="table-responsive">
-				<table class="table table-striped table-hover table-sm">
+				<table id="resultTable" class="table table-striped table-hover table-sm table-fixed">
 					<thead>
 						<tr>
 							<th>Region:</th>
@@ -267,18 +270,6 @@
             </div>
             <div class="col-lg-4 col-md-6">
                <div class="form-group">
-                  <label for="modalmoondata">Moon Data:</label>
-                  <input id="modalmoondata" name="modalmoondata" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
-               </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-               <div class="form-group">
-                  <label for="modalfit">Fit:</label>
-                  <input id="modalfit" name="modalfit" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
-               </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-               <div class="form-group">
                   <label for="modalvuln">Vulnerability:</label>
                   <input id="modalvuln" name="modalvuln" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
                </div>
@@ -324,11 +315,17 @@
 	  </div>
    </div>
 </div>
-
+<!-- TODO: Obfuscate?-->
 	<script>
 
 		$(document).ready(function(){
 			$('#modalform').ajaxForm();
+			$('#resultTable').DataTable({
+				"pagingType": "simple_numbers",
+				"searching": false,
+				"sorting": false
+			})
+			$('.dataTables_length').addClass('bs-select');
 		})
 		$('#modalform').submit(function() {
 			$(this).ajaxSubmit();
@@ -366,7 +363,10 @@
 				//ajax get  -> ore volume
 			
 				//console.log(datastring)
-				getDataString(response.moondata)
+				if(response.type == "Athanor" || response.type == "Tatara"){
+					getDataString(response.moondata)
+				}
+				
 				//console.log(arrayofores)
 				$('#modalfit').val(response.fit)
 				$('#modalvuln').val(response.vulnerability.day + " " + response.vulnerability.hour + ":00")
