@@ -1,16 +1,20 @@
 {%include "headers.njk"%}
 <style>
-.resultrow { cursor: pointer;}
-.table-responsive {
-    overflow-x: hidden;
-}
-.moon-hidden {
-	display: none;
-}
+	.resultrow {
+		cursor: pointer;
+	}
+
+	.table-responsive {
+		overflow-x: hidden;
+	}
+
+	.moon-hidden {
+		display: none;
+	}
 </style>
+
 <body>
-	{%include "navbar.njk"%}
-	{%if user.role.numeric > 0%}
+	{%include "navbar.njk"%} {%if user.role.numeric > 0%}
 	<div class="container">
 		<div class="row">
 			<button class="btn btn-primary my-2" data-toggle="modal" data-target="#search" accesskey="s">Search</button>
@@ -196,132 +200,132 @@
 
 
 <div role="dialog" tabindex="-1" class="modal fade" id="detailview">
-<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-   <div class="modal-content">
-	<div>
-		
-      <div class="modal-header bg-dark text-light">
-         <h4 class="modal-title"><i class=""></i>Citadel Details</h4>
-         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-         <span aria-hidden="true">×</span>
-         </button>
-      </div>
-	  <ul class="nav nav-tabs">
-			<li class="nav-item">
-				<a role="tab" data-toggle="tab" href="#basic-tab" class="nav-link active">Basic Info</a>
-			</li>
-			<li class="nav-item">
-				<a role="tab" data-toggle="tab" href="#fitting-tab" class="nav-link">Fitting</a>
-			</li>
-			<li class="nav-item">
-				<a role="tab" id="moontabtab" data-toggle="tab" href="#moon-tab" class="nav-link">Moongoo</a>
-			</li>
-		</ul>
-      <div class="modal-body">
-		<div class="tab-content">
-		<div role="tabpanel" class="tab-pane active" id="basic-tab">
-	  <form id="modalform" action = "/update" method = "post">
-         <div class="row">
-            <div class="col-lg-4 col-md-6">
-               <div class="form-group">
-                  <label for="modalname">Name:</label>
-                  <!--<p id='modalname'></p>-->
-                  <input id="modalname" name="modalname" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
-               </div>
-            </div>
-			<div class="col-lg-4 col-md-6">
-               <div class="form-group">
-                  <label for="modalcorp">Corp:</label>
-                  <input id="modalcorp" name="modalcorp" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
-               </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-               <div class="form-group">
-                  <label for="modalalliance">Alliance:</label>
-                  <input id="modalalliance" name="modalalliance" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
-               </div>
-            </div>
-			<div class="col-lg-4 col-md-6">
-               <div class="form-group">
-                  <label for="modalsystem">System:</label>
-                  <input id="modalsystem" name="modalsystem" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
-               </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-               <div class="form-group">
-                  <label for="modalregion">Region:</label>
-                  <input id="modalregion" name="modalregion" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
-               </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-               <div class="form-group">
-                  <label for="modalconstellation">Constallation:</label>
-                  <input id="modalconstellation" name="modalconstellation" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
-               </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-               <div class="form-group">
-                  <label for="modaltype">Type:</label>
-				  <input id="modaltype" name="modaltype" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
-               </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-               <div class="form-group">
-                  <label for="modalpower">Power:</label>
-                  <input id="modalpower" name="modalpower" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
-               </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-               <div class="form-group">
-                  <label for="modalvuln">Vulnerability:</label>
-                  <input id="modalvuln" name="modalvuln" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
-               </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-               <div class="form-group">
-                  <label for="modalsubmitted">Date Submitted:</label>
-                  <input id="modalsubmitted" name="modalsubmitted" class="form-control" type="text"  readonly >
-               </div>
-            </div>
-			{%if user.role.numeric > 2%}
-			<div class="col-lg-4 col-md-6">
-				<div class = "form-group">
-				<input type='submit' value='Update' class="btn btn-success">
+	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div>
+
+				<div class="modal-header bg-dark text-light">
+					<h4 class="modal-title">
+						<i class=""></i>Citadel Details</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<ul class="nav nav-tabs">
+					<li class="nav-item">
+						<a role="tab" data-toggle="tab" href="#basic-tab" class="nav-link active">Basic Info</a>
+					</li>
+					<li class="nav-item">
+						<a role="tab" data-toggle="tab" href="#fitting-tab" class="nav-link">Fitting</a>
+					</li>
+					<li class="nav-item">
+						<a role="tab" id="moontabtab" data-toggle="tab" href="#moon-tab" class="nav-link">Moongoo</a>
+					</li>
+				</ul>
+				<div class="modal-body">
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane active" id="basic-tab">
+							<form id="modalform" action="/update" method="post">
+								<div class="row">
+									<div class="col-lg-4 col-md-6">
+										<div class="form-group">
+											<label for="modalname">Name:</label>
+											<!--<p id='modalname'></p>-->
+											<input id="modalname" name="modalname" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-6">
+										<div class="form-group">
+											<label for="modalcorp">Corp:</label>
+											<input id="modalcorp" name="modalcorp" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-6">
+										<div class="form-group">
+											<label for="modalalliance">Alliance:</label>
+											<input id="modalalliance" name="modalalliance" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-6">
+										<div class="form-group">
+											<label for="modalsystem">System:</label>
+											<input id="modalsystem" name="modalsystem" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-6">
+										<div class="form-group">
+											<label for="modalregion">Region:</label>
+											<input id="modalregion" name="modalregion" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-6">
+										<div class="form-group">
+											<label for="modalconstellation">Constallation:</label>
+											<input id="modalconstellation" name="modalconstellation" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-6">
+										<div class="form-group">
+											<label for="modaltype">Type:</label>
+											<input id="modaltype" name="modaltype" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-6">
+										<div class="form-group">
+											<label for="modalpower">Power:</label>
+											<input id="modalpower" name="modalpower" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-6">
+										<div class="form-group">
+											<label for="modalvuln">Vulnerability:</label>
+											<input id="modalvuln" name="modalvuln" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-6">
+										<div class="form-group">
+											<label for="modalsubmitted">Date Submitted:</label>
+											<input id="modalsubmitted" name="modalsubmitted" class="form-control" type="text" readonly>
+										</div>
+									</div>
+									{%if user.role.numeric > 2%}
+									<div class="col-lg-4 col-md-6">
+										<div class="form-group">
+											<input type='submit' value='Update' class="btn btn-success">
+										</div>
+									</div>
+									{%endif%}
+								</div>
+							</form>
+						</div>
+						<div role="tabpanel" class="tab-pane" id="fitting-tab">
+							<p>High Slots:</p>
+							<span id="high"></span>
+							<p>Mid Slots:</p>
+							<span id="mid"></span>
+							<p>Low Slots:</p>
+							<span id="low"></span>
+							<p>Rigs:</p>
+							<span id="rig"></span>
+							<p>Services:</p>
+							<span id="service"></span>
+						</div>
+						<div role="tabpanel" class="tab-pane" id="moon-tab">
+							<label for="moondata">Moon Composition:</label>
+							<p id="moondata"></p>
+							<p>Value for 56d frack (Value may be extremely inaccurate due to lack of ore in jita):</p>
+							<span id="moonvalue"></span>
+							<!-- Estimated value -->
+						</div>
+					</div>
+
 				</div>
 			</div>
-			{%endif%}
-		 </div>
-	  </form>
 		</div>
-		<div role="tabpanel" class="tab-pane" id="fitting-tab">
-		<p>High Slots:</p>
-		<span id="high"></span>
-		<p>Mid Slots:</p>
-		<span id="mid"></span>
-		<p>Low Slots:</p>
-		<span id="low"></span>
-		<p>Rigs:</p>
-		<span id="rig"></span>
-		<p>Services:</p>
-		<span id="service"></span>
-		</div>
-		<div role="tabpanel" class="tab-pane" id="moon-tab">
-		<label for="moondata">Moon Composition:</label>
-		<p id="moondata"></p>
-		<p>Value for 56d frack (Value may be extremely inaccurate due to lack of ore in jita):</p>
-		<span id="moonvalue"></span>
-		<!-- Estimated value -->
-		</div>
-		</div>
-
-	  </div>
-	  </div>
-   </div>
-</div>
-<!-- TODO: Obfuscate?-->
+	</div>
+	<!-- TODO: Obfuscate?-->
 	<script>
-
-		$(document).ready(function(){
+		$(document).ready(function () {
 			$('#modalform').ajaxForm();
 			$('#resultTable').DataTable({
 				"pagingType": "simple_numbers",
@@ -330,12 +334,13 @@
 			})
 			$('.dataTables_length').addClass('bs-select');
 		})
-		$('#modalform').submit(function() {
+		$('#modalform').submit(function () {
 			$(this).ajaxSubmit();
 			$('#detailview').modal('hide');
 			return false;
-			
+
 		})
+
 		function openCitadelInfo(id) {
 			//Postpone until citadels are moved to database	
 			$.ajax({
@@ -355,36 +360,37 @@
 				$('#modalpower').val(response.power)
 				$('#modalmoondata').val(response.moondata)
 				//console.log(response)
-				
-				
+
+
 				//HERE
 				//ajax get  -> ore volume
-			
+
 				//console.log(datastring)
-				if(response.type == "Athanor" || response.type == "Tatara"){
+				if (response.type == "Athanor" || response.type == "Tatara") {
 					$('#moontabtab').removeClass('moon-hidden')
 					var moongoo = "";
-				for(var i = 0; i < response.moondata.length; i++){
-					console.log(i)
-					moongoo += response.moondata[i].ore + ": " + parseFloat(response.moondata[i].amount * 100).toFixed(2)+"%<br />"
-				}
-				$('#moondata').html(moongoo)
+					for (var i = 0; i < response.moondata.length; i++) {
+						console.log(i)
+						moongoo += response.moondata[i].ore + ": " + parseFloat(response.moondata[i].amount * 100).toFixed(2) +
+							"%<br />"
+					}
+					$('#moondata').html(moongoo)
 					getDataString(response.moondata)
-				}else{
+				} else {
 					$('#moontabtab').addClass('moon-hidden')
 				}
-				
+
 				//console.log(arrayofores)
 
 				for (var property in response.fit) {
-    				if (response.fit.hasOwnProperty(property)) {
-        				var string= ""
+					if (response.fit.hasOwnProperty(property)) {
+						var string = ""
 						var counter = 0;
 						//console.log(response.fit[property])
 						response.fit[property].forEach(slot => {
 							string += slot + "<br />"
 							counter++
-							if(counter == response.fit[property].length){
+							if (counter == response.fit[property].length) {
 								console.log(`${property}`)
 								console.log(string)
 								$(`#${property}`).html(string)
@@ -392,48 +398,56 @@
 								string = ""
 							}
 						})
-    				}
+					}
 				}
-				$('#modalvuln').val(response.vulnerability.day + " " + response.vulnerability.hour + ":00")
+				if (response.vulnday.day != "") {
+					$('#modalvuln').val(response.vulnerability.day + " " + response.vulnerability.hour + ":00")
+				} else {
+					$('#modalvuln').val("No data")
+				}
+
 				$('#modalsubmitted').val(response.lastSubmittedDate)
 			});
 		}
-		function getDataString(moondata){
+
+		function getDataString(moondata) {
 			console.log(moondata)
 			var volumeofore = 1344 * 20000; //56d * 20km3/h
-				var arrayofores = []
-				var datastring = ""
-				var counter = 0;
-				moondata.forEach(moon => {
-					$.ajax({
-						url: "https://esi.evetech.net/latest/universe/types/"+moon.id+"/?datasource=tranquility&language=en-us",
-						type: "GET"
-					}).done(function(response1){
-						arrayofores.push({ore: moon.ore, amount: parseFloat((parseFloat(moon.amount * volumeofore).toFixed(0))/response1.volume).toFixed(0)});
-						datastring += moon.ore + " " + parseFloat((parseFloat(moon.amount * volumeofore).toFixed(0))/response1.volume).toFixed(0) + "\n"
-						counter++
-						if(counter == moondata.length){
+			var arrayofores = []
+			var datastring = ""
+			var counter = 0;
+			moondata.forEach(moon => {
+				$.ajax({
+					url: "https://esi.evetech.net/latest/universe/types/" + moon.id + "/?datasource=tranquility&language=en-us",
+					type: "GET"
+				}).done(function (response1) {
+					arrayofores.push({
+						ore: moon.ore,
+						amount: parseFloat((parseFloat(moon.amount * volumeofore).toFixed(0)) / response1.volume).toFixed(0)
+					});
+					datastring += moon.ore + " " + parseFloat((parseFloat(moon.amount * volumeofore).toFixed(0)) / response1.volume)
+						.toFixed(0) + "\n"
+					counter++
+					if (counter == moondata.length) {
 						console.log("FUCK" + datastring)
 						getEvePraisal(datastring)
-					} 
-					})
-					
-					
-					
+					}
 				})
-				//return datastring
-		}
-		function getEvePraisal(data){
-				$.ajax({
-					url:"https://evepraisal.com/appraisal.json?market=jita&persist=no",
-					method:"POST",
-					data: data
-				}).done(function(evepraisal){
-					console.log(evepraisal)
-					$("#moonvalue").html((evepraisal.appraisal.totals.sell).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + " isk")
-				})
+
+
+
+			})
+			//return datastring
 		}
 
-		
-
+		function getEvePraisal(data) {
+			$.ajax({
+				url: "https://evepraisal.com/appraisal.json?market=jita&persist=no",
+				method: "POST",
+				data: data
+			}).done(function (evepraisal) {
+				console.log(evepraisal)
+				$("#moonvalue").html((evepraisal.appraisal.totals.sell).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + " isk")
+			})
+		}
 	</script>

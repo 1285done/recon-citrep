@@ -1,4 +1,9 @@
 {%include "headers.njk"%} {%include "navbar.njk"%}
+<style>
+.table-responsive {
+		overflow-x: hidden;
+	}
+</style>
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -18,7 +23,7 @@
                             <button class="btn btn-dark my-2" onclick="openModalClear()">Add/Update User</button>
 
                             <div class="table-responsive">
-                                <table class="table table-striped table-hover table-sm">
+                                <table id="userTable" class="table table-striped table-hover table-sm">
                                     <thead>
                                         <tr>
                                             <th></th>
@@ -155,4 +160,12 @@
         $("#pilotName").val('');
         $('#addUser').modal('toggle');
     }
+    $(document).ready(function () {
+			$('#userTable').DataTable({
+				"pagingType": "simple_numbers",
+				"searching": true,
+				"sorting": false
+			})
+			$('.dataTables_length').addClass('bs-select');
+		})
 </script>
