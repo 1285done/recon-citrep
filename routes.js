@@ -89,10 +89,13 @@ router.get('/appraisal.json', function(req, res){
 
 
 
-router.get('/*.*', function(req, res){
+router.get('/public/*.*', function(req, res){
 	console.log(`${req.method} ${req.url}`);
 	// parse URL
 	const parsedUrl = url.parse(req.url);
+	if(parsedUrl.pathname.includes("..")){
+		res.status(418).send("fuck off")
+	}
 	// extract URL path
 	let pathname = `.${parsedUrl.pathname}`;
 	// maps file extention to MIME types

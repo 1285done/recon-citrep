@@ -58,29 +58,31 @@ exports.submitted = function (req, res) {
 						//Split data between power slots
 						var splitt = req.body.fit.split("\r\n")
 						var highs = _.takeWhile(splitt, function (o) {
-							return o != "Medium Power Slots"
+							return o != "Medium Power Slots" && o != "Low Power Slots" && o != "Rig Slots" && o != "Service Slots"
 						})
 						splitt = _.drop(splitt, highs.length)
 						var mids = _.takeWhile(splitt, function (o) {
-							return o != "Low Power Slots"
+							return o != "Low Power Slots" && o != "Rig Slots" && o != "Service Slots"
 						})
 						splitt = _.drop(splitt, mids.length)
 						var lows = _.takeWhile(splitt, function (o) {
-							return o != "Rig Slots"
+							return o != "Rig Slots" && o != "Service Slots"
 						})
 						splitt = _.drop(splitt, lows.length)
 						var rigs = _.takeWhile(splitt, function (o) {
 							return o != "Service Slots"
 						})
 						splitt = _.drop(splitt, rigs.length)
+						
 						var services = splitt;
+						
 						//Drop the label, add to object
 						CitadelObject.fit.high = _.drop(highs, 1)
 						CitadelObject.fit.mid = _.drop(mids, 1)
 						CitadelObject.fit.low = _.drop(lows, 1)
 						CitadelObject.fit.rig = _.drop(rigs, 1)
 						CitadelObject.fit.service = _.drop(services, 1)
-
+						console.log(CitadelObject.fit)
 
 
 
