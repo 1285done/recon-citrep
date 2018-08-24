@@ -6,19 +6,23 @@ const ObjectId = require('mongodb').ObjectID;
 var _ = require('lodash');
 
 exports.getsearch = function (req, res) {
-	if (req.user.role.numeric == 0) {
-		res.send(403);
-	} else {
+	if (!users.isRoleNumeric(req.user, 1)) {
+		res.status(401).send("Not Allowed");
+		return;
+	}
 		res.render('search.html', {
 			search: true,
 			user: req.user
 		});
-	}
+	
 
 }
 
 exports.search = function (req, res) {
-
+	if (!users.isRoleNumeric(req.user, 1)) {
+		res.status(401).send("Not Allowed");
+		return;
+	}
 	//Remove empty search params
 	if (req.body.system == '') {
 		delete req.body.system
@@ -157,6 +161,10 @@ exports.search = function (req, res) {
 
 }
 exports.getDetails = function(req, res){
+	if (!users.isRoleNumeric(req.user, 0)) {
+		res.status(401).send("Not Allowed");
+		return;
+	}
 	db.findOne({"_id": ObjectId(req.params.citadelid)}, function(err, result){
 		if(result === undefined){
 			res.send(404)
@@ -169,6 +177,10 @@ exports.getDetails = function(req, res){
 }
 
 exports.updateCitadel= function(req, res){
+	if (!users.isRoleNumeric(req.user, 2)) {
+		res.status(401).send("Not Allowed");
+		return;
+	}
 	console.log(req.body)
 	//Hmm, I don't particularly like this, need to work on fitting/moon shit first imo
 	var citadelObject = {}

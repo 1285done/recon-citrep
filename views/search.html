@@ -299,20 +299,49 @@
 							</form>
 						</div>
 						<div role="tabpanel" class="tab-pane" id="fitting-tab">
+						
 							<p>High Slots:</p>
-							<span id="high"></span>
+							<div class="table-responsive">
+							<table id="hightable" class = "table table-striped table-hover table-sm">
+								<tbody id="high">
+								</tbody>
+							</table>
+							</div>
 							<p>Mid Slots:</p>
-							<span id="mid"></span>
+							<div class="table-responsive">
+							<table id="midtable" class = "table table-striped table-hover table-sm">
+								<tbody id="mid">
+								</tbody>
+							</table>
+							</div>
 							<p>Low Slots:</p>
-							<span id="low"></span>
+							<div class="table-responsive">
+							<table id="lowtable" class = "table table-striped table-hover table-sm">
+								<tbody id="low">
+								</tbody>
+							</table>
+							</div>
 							<p>Rigs:</p>
-							<span id="rig"></span>
+							<div class="table-responsive">
+							<table id="rigtable" class = "table table-striped table-hover table-sm">
+								<tbody id="rig">
+								</tbody>
+							</table>
+							</div>
 							<p>Services:</p>
-							<span id="service"></span>
+							<div class="table-responsive">
+							<table id="servicetable" class = "table table-striped table-hover table-sm">
+								<tbody id="service">
+								</tbody>
+							</table>
+							</div>
 						</div>
 						<div role="tabpanel" class="tab-pane" id="moon-tab">
 							<label for="moondata">Moon Composition:</label>
-							<p id="moondata"></p>
+							<table id="servicetable" class = "table table-striped table-hover table-sm">
+								<tbody id="moondata">
+								</tbody>
+							</table>
 							<p>Value for 56d frack (Value may be extremely inaccurate due to lack of ore in jita):</p>
 							<span id="moonvalue"></span>
 							<!-- Estimated value -->
@@ -334,120 +363,231 @@
 			})
 			$('.dataTables_length').addClass('bs-select');
 		})
-		$('#modalform').submit(function () {
-			$(this).ajaxSubmit();
-			$('#detailview').modal('hide');
-			return false;
+	$('#modalform').submit(function () {
+		$(this).ajaxSubmit();
+		$('#detailview').modal('hide');
+		return false;
 
-		})
+	})
 
-		function openCitadelInfo(id) {
-			//Postpone until citadels are moved to database	
-			$.ajax({
-				url: "/citadel/" + id,
-				type: "POST",
-				data: ""
-			}).done(function (response) {
-				//console.log(response)
-				$('#detailview').modal('toggle');
-				$('#modalname').val(response.citname)
-				$('#modaltype').val(response.type)
-				$('#modalalliance').val(response.alliance)
-				$('#modalcorp').val(response.corp)
-				$('#modalregion').val(response.region)
-				$('#modalconstellation').val(response.constellation)
-				$('#modalsystem').val(response.system)
-				$('#modalpower').val(response.power)
-				$('#modalmoondata').val(response.moondata)
-				//console.log(response)
-
-
-				//HERE
-				//ajax get  -> ore volume
-
-				//console.log(datastring)
-				if (response.type == "Athanor" || response.type == "Tatara") {
-					$('#moontabtab').removeClass('moon-hidden')
-					var moongoo = "";
-					for (var i = 0; i < response.moondata.length; i++) {
-						console.log(i)
-						moongoo += response.moondata[i].ore + ": " + parseFloat(response.moondata[i].amount * 100).toFixed(2) +
-							"%<br />"
-					}
-					$('#moondata').html(moongoo)
-					getDataString(response.moondata)
-				} else {
-					$('#moontabtab').addClass('moon-hidden')
+	function openCitadelInfo(id) {
+		$.ajax({
+			url: "/citadel/" + id,
+			type: "POST",
+			data: ""
+		}).done(function (response) {
+			$('#detailview').modal('toggle');
+			$('#modalname').val(response.citname)
+			$('#modaltype').val(response.type)
+			$('#modalalliance').val(response.alliance)
+			$('#modalcorp').val(response.corp)
+			$('#modalregion').val(response.region)
+			$('#modalconstellation').val(response.constellation)
+			$('#modalsystem').val(response.system)
+			$('#modalpower').val(response.power)
+			$('#modalmoondata').val(response.moondata)
+			if (response.type == "Athanor" || response.type == "Tatara") {
+				$('#moontabtab').removeClass('moon-hidden')
+				var moongoo = "";
+				for (var i = 0; i < response.moondata.length; i++) {
+					console.log(i)
+					moongoo += "<tr><td><img src='https://image.eveonline.com/Type/"+response.moondata[i].id+"_32.png'/></td><td>"+ response.moondata[i].ore + "</td><td>" + parseFloat(response.moondata[i].amount * 100).toFixed(2) +
+						"%</td>"
 				}
+				$('#moondata').html(moongoo)
+				getDataString(response.moondata)
+			} else {
+				$('#moontabtab').addClass('moon-hidden')
+			}
 
-				//console.log(arrayofores)
+			console.log()
+			var highstring = ""
+			var midstring = ""
+			var lowstring = ""
+			var rigstring = ""
+			var servicestring = ""
+			var counter = 0;
+			var func = function (){
+				var arr = generateIDs(response.fit)
+				var dfd = $.Deferred();
+				for(var promise of arr){
+				console.log(promise)
+				switch(promise.slot){
+					case "high":
+					var object = promise.promise.id().done(function(data){
+						highstring += "<tr><td><img src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
+						//console.log(highstring)
+						counter++
+						if(counter == arr.length){
+					dfd.resolve();
+				}
+					})
+					break;
+					case "mid":
+					var object = promise.promise.id().done(function(data){
+						midstring += "<tr><td><img src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
+						//console.log(midstring)
+						counter++
+						if(counter == arr.length){
+					dfd.resolve();
+				}
+					})
+					break;
+					case "low":
+					var object = promise.promise.id().done(function(data){
+						lowstring += "<tr><td><img src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
+						//console.log(lowstring)
+						counter++
+						if(counter == arr.length){
+					dfd.resolve();
+				}
+					})
+					break;
+					case "rig":
+					var object = promise.promise.id().done(function(data){
+						rigstring += "<tr><td><img src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
+						//console.log(rigstring)
+						counter++
+						if(counter == arr.length){
+					dfd.resolve();
+				}
+					})
+					break;
+					case "service":
+					var object = promise.promise.id().done(function(data){
+						servicestring += "<tr><td><img src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
+						//console.log(servicestring)
+						counter++
+						if(counter == arr.length){
+					dfd.resolve();
+				}
+					})
+					break;
+				}
+				console.log(counter)
+				
+			}
+			return dfd.promise();
+			}
 
-				for (var property in response.fit) {
-					if (response.fit.hasOwnProperty(property)) {
-						var string = ""
-						var counter = 0;
-						//console.log(response.fit[property])
-						response.fit[property].forEach(slot => {
-							string += slot + "<br />"
+
+			$.when(func()).then(function(){
+				console.log("boop")
+				$(`#high`).html(highstring)
+				$(`#mid`).html(midstring)
+				$(`#low`).html(lowstring)
+				$(`#rig`).html(rigstring)
+				$(`#service`).html(servicestring)
+			})
+			/*
+			for (var property in response.fit) {
+				if (response.fit.hasOwnProperty(property)) {
+					var string = ""
+					var counter = 0;
+					response.fit[property].forEach(slot => {
+						var fuzzworkTypeid = {
+							id: function () {
+								return $.ajax(`http://www.fuzzwork.co.uk/api/typeid.php?typename=${slot}`).then(function (data) {
+									return JSON.parse(data).typeID;
+								})
+							}
+						}
+						fuzzworkTypeid.id().done(function (id) {
+							string += "<tr><td>" + id + "</td><td>" + slot + "</td></tr>"
 							counter++
 							if (counter == response.fit[property].length) {
 								console.log(`${property}`)
 								console.log(string)
-								$(`#${property}`).html(string)
+								
 								counter = 0;
 								string = ""
 							}
 						})
-					}
-				}
-				if (response.vulnday.day != "") {
-					$('#modalvuln').val(response.vulnerability.day + " " + response.vulnerability.hour + ":00")
-				} else {
-					$('#modalvuln').val("No data")
-				}
 
-				$('#modalsubmitted').val(response.lastSubmittedDate)
-			});
-		}
 
-		function getDataString(moondata) {
-			console.log(moondata)
-			var volumeofore = 1344 * 20000; //56d * 20km3/h
-			var arrayofores = []
-			var datastring = ""
-			var counter = 0;
-			moondata.forEach(moon => {
-				$.ajax({
-					url: "https://esi.evetech.net/latest/universe/types/" + moon.id + "/?datasource=tranquility&language=en-us",
-					type: "GET"
-				}).done(function (response1) {
-					arrayofores.push({
-						ore: moon.ore,
-						amount: parseFloat((parseFloat(moon.amount * volumeofore).toFixed(0)) / response1.volume).toFixed(0)
-					});
-					datastring += moon.ore + " " + parseFloat((parseFloat(moon.amount * volumeofore).toFixed(0)) / response1.volume)
-						.toFixed(0) + "\n"
-					counter++
-					if (counter == moondata.length) {
-						console.log("FUCK" + datastring)
-						getEvePraisal(datastring)
+
+
+					})
+				}
+			}*/
+			if (!!response.vulnerability.day || !!response.vulnerability.hour) {
+				$('#modalvuln').val(response.vulnerability.day + " " + response.vulnerability.hour + ":00")
+			} else {
+				$('#modalvuln').val("No data")
+			}
+
+			$('#modalsubmitted').val(response.lastSubmittedDate)
+		});
+	}
+
+	function generateIDs(fit) {
+		var promiseArr = []
+		for (var property in fit) {
+			if (fit.hasOwnProperty(property)) {
+				fit[property].forEach(slot => {
+					var fuzzworkTypeid = {
+						id: function () {
+							return $.ajax(`http://www.fuzzwork.co.uk/api/typeid.php?typename=${slot}`).then(function (data) {
+								return JSON.parse(data);
+							})
+						}
 					}
+					promiseArr.push({slot: property, promise: fuzzworkTypeid})
 				})
-
-
-
-			})
-			//return datastring
+			}
 		}
+		return promiseArr
+	}
 
-		function getEvePraisal(data) {
+
+	function typenameToId(name) {
+		$.ajax({
+			url: `http://www.fuzzwork.co.uk/api/typeid.php?typename=${name}`,
+			type: 'GET'
+		}).done(function (res) {
+			console.log(JSON.parse(res))
+			console.log(JSON.parse(res).typeID)
+			return JSON.parse(res).typeID
+		})
+	}
+
+	//TODO: Get refined products instead of raw ore.
+	function getDataString(moondata) {
+		console.log(moondata)
+		var volumeofore = 1344 * 20000; //56d * 20km3/h
+		var arrayofores = []
+		var datastring = ""
+		var counter = 0;
+		moondata.forEach(moon => {
 			$.ajax({
-				url: "https://evepraisal.com/appraisal.json?market=jita&persist=no",
-				method: "POST",
-				data: data
-			}).done(function (evepraisal) {
-				console.log(evepraisal)
-				$("#moonvalue").html((evepraisal.appraisal.totals.sell).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + " isk")
+				url: "https://esi.evetech.net/latest/universe/types/" + moon.id + "/?datasource=tranquility&language=en-us",
+				type: "GET"
+			}).done(function (response1) {
+				arrayofores.push({
+					ore: moon.ore,
+					amount: parseFloat((parseFloat(moon.amount * volumeofore).toFixed(0)) / response1.volume).toFixed(0)
+				});
+				datastring += moon.ore + " " + parseFloat((parseFloat(moon.amount * volumeofore).toFixed(0)) / response1.volume)
+					.toFixed(0) + "^"
+				counter++
+				if (counter == moondata.length) {
+					getEvePraisal(datastring)
+				}
 			})
-		}
+
+
+
+		})
+		//return datastring
+	}
+
+	function getEvePraisal(data) {
+		$.ajax({
+			url: `/appraisal.json?market=jita&persist=no&raw_textarea=${data}`,
+			method: "GET"
+		}).done(function (evepraisal) {
+			console.log(evepraisal)
+			$("#moonvalue").html((evepraisal.appraisal.totals.sell).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + " isk")
+		})
+	}
 	</script>

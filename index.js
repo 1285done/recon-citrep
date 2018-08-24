@@ -86,23 +86,6 @@ require('./dbHandler').connect(function () {
 });
 
 
-
-
-
-// Running Server Details.
-//var server = app.listen(7798, function () {
-//	var host = server.address().address
-///	var port = server.address().port
-//	console.log("Example app listening at %s:%s Port", host, port)
-///});
-
-
-
-
-/*app.get('/search', function (req, res) {
-	res.render('search.html', {search: true});
-});*/
-
 app.get('/space.jpg', function (req, res) {
 	fs.readFile('space.jpg', function (err, data) {
 		res.send(data);
@@ -114,6 +97,3 @@ app.get('/login.png', function (req, res) {
 		res.send(data);
 	})
 });
-
-
-//yeet420

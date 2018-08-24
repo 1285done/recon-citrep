@@ -7,6 +7,10 @@ var urlencodedParser = bodyParser.urlencoded({
 var fs = require("fs");
 const path = require('path');
 const url = require('url');
+var request = require('request')
+
+const setup = require('./setup.js');
+const users = require('./models/users.js')(setup);
 
 const search_controller = require('./controllers/search.js')
 const form_controller = require('./controllers/form.js')
@@ -53,6 +57,37 @@ router.get('/fa.css', function (req, res) {
 		res.send(data);
 	})
 })
+
+function replaceAll(str, find, replace) {
+	return str.replace(new RegExp(find, 'g'), replace);
+}
+
+//Redirect evepraisal call from clientside javascript to server side, return the result.
+router.get('/appraisal.json', function(req, res){
+	//Anti-Kahanis measures.
+	if (!users.isRoleNumeric(req.user, 0)) {
+		res.status(401).send("Not Allowed");
+		return;
+	}
+	var urll = replaceAll(req.url, '\\^','\n')
+	console.log(req.url + " || " + urll)
+	var options = {
+			url: `https://evepraisal.com${urll}`,
+			headers: {
+				'User-Agent': "Scassany_Maricadie | Project Citrep"
+			}
+	}
+	request.post( options, function(err, response, body){
+		if (!err && response.statusCode == 200) {
+			//console.log(JSON.parse(body).appraisal)
+			res.status(200).send(JSON.parse(body))
+	}
+	})
+	console.log(req.url)
+
+})
+
+
 
 router.get('/*.*', function(req, res){
 	console.log(`${req.method} ${req.url}`);

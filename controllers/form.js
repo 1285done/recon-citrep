@@ -130,7 +130,3 @@ function submitData(citadelObject, user) {
 	citadels.generateNewCitadel(citadelObject, user, function () {});
 	//db.get('citadels').push(citadelObject).write();
 }
-
-function foundCitadel(name, type, system) {
-
-}
