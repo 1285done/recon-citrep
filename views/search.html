@@ -364,6 +364,7 @@
 	</div>
 	<!-- TODO: Obfuscate?-->
 	<script>
+		var FIT_RACKS = ["high", "mid", "low", "rig", "service"];
 		$(document).ready(function () {
 			$('#modalform').ajaxForm();
 			$('#resultTable').DataTable({
@@ -419,84 +420,30 @@
 			}
 
 			console.log()
-			var highstring = ""
-			var midstring = ""
-			var lowstring = ""
-			var rigstring = ""
-			var servicestring = ""
-			var counter = 0;
-			var func = function (){
-				var arr = generateIDs(response.fit)
-				var dfd = $.Deferred();
-				for(var promise of arr){
-				//console.log(promise)
-				switch(promise.slot){
-					case "high":
-					var object = promise.promise.id().done(function(data){
-						highstring += "<tr><td><img class='fit-icon' src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
-						//console.log(highstring)
-						counter++
-						if(counter == arr.length){
-					dfd.resolve();
+			generateIDs(response.fit).done(function(namesToIds) {
+				for (var j = 0; j < FIT_RACKS.length; j++) {
+					var rack = FIT_RACKS[j];
+					var rackMemberCounts = Object.create(null);
+					for (var i = 0; i < response.fit[rack].length; i++) {
+						var name = response.fit[rack][i];
+						if (name in rackMemberCounts) {
+							rackMemberCounts[name]++;
+						} else {
+							rackMemberCounts[name] = 1;
+						}
+					}
+					var rackMembers = Object.keys(rackMemberCounts);
+					var string = "";
+					for (var i = 0; i < rackMembers.length; i++) {
+						var name = rackMembers[i];
+						var id = namesToIds[name];
+						var count = rackMemberCounts[name] == 1 ? "" : " x" + rackMemberCounts[name];
+						string += "<tr><td><img class='fit-icon' src='https://image.eveonline.com/Type/" + id + "_32.png'/></td><td>" + name + count + "</td></tr>";
+					}
+					$("#" + rack).html(string);
 				}
-					})
-					break;
-					case "mid":
-					var object = promise.promise.id().done(function(data){
-						midstring += "<tr><td><img class='fit-icon' src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
-						//console.log(midstring)
-						counter++
-						if(counter == arr.length){
-					dfd.resolve();
-				}
-					})
-					break;
-					case "low":
-					var object = promise.promise.id().done(function(data){
-						lowstring += "<tr><td><img class='fit-icon' src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
-						//console.log(lowstring)
-						counter++
-						if(counter == arr.length){
-					dfd.resolve();
-				}
-					})
-					break;
-					case "rig":
-					var object = promise.promise.id().done(function(data){
-						rigstring += "<tr><td><img class='fit-icon' src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
-						//console.log(rigstring)
-						counter++
-						if(counter == arr.length){
-					dfd.resolve();
-				}
-					})
-					break;
-					case "service":
-					var object = promise.promise.id().done(function(data){
-						servicestring += "<tr><td><img class='fit-icon' src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
-						//console.log(servicestring)
-						counter++
-						if(counter == arr.length){
-					dfd.resolve();
-				}
-					})
-					break;
-				}
-				//console.log(counter)
-				
-			}
-			return dfd.promise();
-			}
+			});
 
-
-			$.when(func()).then(function(){
-				console.log("boop")
-				$(`#high`).html(highstring)
-				$(`#mid`).html(midstring)
-				$(`#low`).html(lowstring)
-				$(`#rig`).html(rigstring)
-				$(`#service`).html(servicestring)
-			})
 			/*
 			for (var property in response.fit) {
 				if (response.fit.hasOwnProperty(property)) {
@@ -539,22 +486,25 @@
 	}
 
 	function generateIDs(fit) {
-		var promiseArr = []
-		for (var property in fit) {
-			if (fit.hasOwnProperty(property)) {
-				fit[property].forEach(slot => {
-					var fuzzworkTypeid = {
-						id: function () {
-							return $.ajax(`https://www.fuzzwork.co.uk/api/typeid.php?typename=${slot}`).then(function (data) {
-								return JSON.parse(data);
-							})
-						}
-					}
-					promiseArr.push({slot: property, promise: fuzzworkTypeid})
-				})
+		var requestSet = new Set();
+		for (var j = 0; j < FIT_RACKS.length; j++) {
+			var rack = FIT_RACKS[j];
+			for (var i = 0; i < fit[rack].length; i++) {
+				requestSet.add(fit[rack][i]);
 			}
 		}
-		return promiseArr
+		return $.ajax({
+			url: "https://esi.evetech.net/v1/universe/ids/?datasource=tranquility&language=en-us",
+			type: "POST",
+			data: JSON.stringify(Array.from(requestSet))
+		}).then(function (data) {
+			var invtypes = data.inventory_types;
+			var dict = Object.create(null);
+			for (var i = 0; i < invtypes.length; i++) {
+				dict[invtypes[i].name] = invtypes[i].id;
+			}
+			return dict;
+		});
 	}
 
 
