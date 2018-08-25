@@ -426,7 +426,7 @@
 				var arr = generateIDs(response.fit)
 				var dfd = $.Deferred();
 				for(var promise of arr){
-				console.log(promise)
+				//console.log(promise)
 				switch(promise.slot){
 					case "high":
 					var object = promise.promise.id().done(function(data){
@@ -479,7 +479,7 @@
 					})
 					break;
 				}
-				console.log(counter)
+				//console.log(counter)
 				
 			}
 			return dfd.promise();
@@ -557,7 +557,7 @@
 
 	function typenameToId(name) {
 		$.ajax({
-			url: `http://www.fuzzwork.co.uk/api/typeid.php?typename=${name}`,
+			url: `https://www.fuzzwork.co.uk/api/typeid.php?typename=${name}`,
 			type: 'GET'
 		}).done(function (res) {
 			console.log(JSON.parse(res))
