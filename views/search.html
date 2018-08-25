@@ -234,6 +234,7 @@
 											<input id="modalname" name="modalname" class="form-control" type="text" {%if user.role.numeric < 2%}readonly{%endif%}>
 										</div>
 									</div>
+									
 									<div class="col-lg-4 col-md-6">
 										<div class="form-group">
 											<label for="modalcorp">Corp:</label>
@@ -287,6 +288,12 @@
 											<label for="modalsubmitted">Date Submitted:</label>
 											<input id="modalsubmitted" name="modalsubmitted" class="form-control" type="text" readonly>
 										</div>
+									</div>
+									<div class="col-lg-4 col-md-6">
+									<div class="form-group">
+									<label for="modalid">ID:</label>
+									<input id="modalid" name="modalid" class="form-control" type="text" readonly>
+									</div>
 									</div>
 									{%if user.role.numeric > 2%}
 									<div class="col-lg-4 col-md-6">
@@ -364,9 +371,15 @@
 			$('.dataTables_length').addClass('bs-select');
 		})
 	$('#modalform').submit(function () {
-		$(this).ajaxSubmit();
+		$(this).ajaxSubmit(function(res){
+			if(res == "success"){
+				location.reload()
+			}else{
+				alert("There was an error updating this citadel")
+			}
+		});
 		$('#detailview').modal('hide');
-		return false;
+		//return false;
 
 	})
 
@@ -376,6 +389,7 @@
 			type: "POST",
 			data: ""
 		}).done(function (response) {
+			console.log(response)
 			$('#detailview').modal('toggle');
 			$('#modalname').val(response.citname)
 			$('#modaltype').val(response.type)
@@ -386,6 +400,7 @@
 			$('#modalsystem').val(response.system)
 			$('#modalpower').val(response.power)
 			$('#modalmoondata').val(response.moondata)
+			$('#modalid').val(id)
 			if (response.type == "Athanor" || response.type == "Tatara") {
 				$('#moontabtab').removeClass('moon-hidden')
 				var moongoo = "";

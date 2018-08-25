@@ -1,7 +1,7 @@
 const setup = require('../setup.js');
 const cache = require('../cache.js')(setup);
 const esi = require('eve-swagger');
-
+var ObjectId = require('mongodb').ObjectID;
 const db = require('../dbHandler.js').db.collection('citadels');
 const log = require('../logger.js')(module);
 
@@ -42,7 +42,7 @@ module.exports = function (setup) {
 
     }
 
-    module.getCitadel = function(id){
+    module.getCitadel = function(id, cb){
         db.find({
             '_id': ObjectId(id)
         }).toArray(function (err, docs) {
@@ -53,6 +53,7 @@ module.exports = function (setup) {
             if (docs.length === 0) {
                 return false;
             } else {
+                cb(docs[0])
                 return docs[0]
             }
         });
@@ -70,6 +71,13 @@ module.exports = function (setup) {
             }
         })
         
+    }
+
+    module.updateCitadel = function(id, newInfo, cb){
+        console.log(id + " UPDATING " + newInfo)
+        db.update({'_id': ObjectId(id)}, newInfo).then(function(){
+            cb("success")
+        }, function(){cb("fail")})
     }
 
     return module;

@@ -145,6 +145,6 @@ router.get('/public/*.*', function(req, res){
 
 //Search
 router.post('/citadel/:citadelid', search_controller.getDetails);
-router.post('/update', search_controller.updateCitadel);
+router.post('/update', search_controller.updateBasicInfo);
 
 module.exports = router;

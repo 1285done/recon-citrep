@@ -176,23 +176,51 @@ exports.getDetails = function(req, res){
 	
 }
 
-exports.updateCitadel= function(req, res){
+exports.updateBasicInfo = function(req, res){
 	if (!users.isRoleNumeric(req.user, 2)) {
 		res.status(401).send("Not Allowed");
 		return;
 	}
 	console.log(req.body)
-	//Hmm, I don't particularly like this, need to work on fitting/moon shit first imo
-	var citadelObject = {}
-	citadelObject.name = req.body.modalname
-	citadelObject.corp = req.body.modalcorp
-	citadelObject.alliance = req.body.modalalliance
-	citadelObject.fit = req.body.modalfit
-	citadelObject.moondata = req.body.modalmoondata
-	citadelObject.power = req.body.modalpower
-	citadelObject.lastSubmittedDate = new Date()
-	citadelObject.vulnerability = {
-		day: 0,
-		hour: 0
+	var vuln = req.body.modalvuln
+	var vulnday = undefined
+	var vulnhour = undefined
+	if(req.body.modalvuln != "No data"){
+		vulnday = vuln.split(" ")[0]
+		vulnhour = vuln.split(" ")[1].split(":")[0]
 	}
+	citadels.getCitadel(req.body.modalid, function(cit){
+		cit.submitters.push(req.user.characterID)
+		var citadelObject = {
+			citname: req.body.modalname,
+			corp: req.body.modalcorp,
+			alliance: req.body.modalalliance,
+			power: req.body.modalpower,
+			system: req.body.modalsystem,
+			region: req.body.modalregion,
+			constellation: req.body.modalconstellation,
+			type: req.body.modaltype,
+			fit: cit.fit,
+			moondata: cit.moondata,
+			lastSubmittedDate: new Date(),
+			vulnerability: {
+				day: vulnday,
+				hour: vulnhour
+			},
+			submitters: cit.submitters
+		}
+		console.log(citadelObject)
+		citadels.updateCitadel(cit._id, citadelObject, function(resp){
+			res.status(200).send(resp)
+		})
+	})
+	
+	//
+	
+}
+exports.updateFit = function(req, res){
+
+}
+exports.updateGoo = function(req, res){
+
 }
