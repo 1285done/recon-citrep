@@ -542,7 +542,7 @@
 				fit[property].forEach(slot => {
 					var fuzzworkTypeid = {
 						id: function () {
-							return $.ajax(`http://www.fuzzwork.co.uk/api/typeid.php?typename=${slot}`).then(function (data) {
+							return $.ajax(`https://www.fuzzwork.co.uk/api/typeid.php?typename=${slot}`).then(function (data) {
 								return JSON.parse(data);
 							})
 						}
