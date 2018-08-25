@@ -11,6 +11,9 @@
 	.moon-hidden {
 		display: none;
 	}
+	.modal-dialog{     overflow-y: initial !important } 
+	.modal-body{     height: 70vh;     overflow-y: auto; }
+	.fitIcon { height: 20px;}
 </style>
 
 <body>
@@ -430,7 +433,7 @@
 				switch(promise.slot){
 					case "high":
 					var object = promise.promise.id().done(function(data){
-						highstring += "<tr><td><img src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
+						highstring += "<tr><td><img class='fit-icon' src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
 						//console.log(highstring)
 						counter++
 						if(counter == arr.length){
@@ -440,7 +443,7 @@
 					break;
 					case "mid":
 					var object = promise.promise.id().done(function(data){
-						midstring += "<tr><td><img src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
+						midstring += "<tr><td><img class='fit-icon' src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
 						//console.log(midstring)
 						counter++
 						if(counter == arr.length){
@@ -450,7 +453,7 @@
 					break;
 					case "low":
 					var object = promise.promise.id().done(function(data){
-						lowstring += "<tr><td><img src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
+						lowstring += "<tr><td><img class='fit-icon' src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
 						//console.log(lowstring)
 						counter++
 						if(counter == arr.length){
@@ -460,7 +463,7 @@
 					break;
 					case "rig":
 					var object = promise.promise.id().done(function(data){
-						rigstring += "<tr><td><img src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
+						rigstring += "<tr><td><img class='fit-icon' src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
 						//console.log(rigstring)
 						counter++
 						if(counter == arr.length){
@@ -470,7 +473,7 @@
 					break;
 					case "service":
 					var object = promise.promise.id().done(function(data){
-						servicestring += "<tr><td><img src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
+						servicestring += "<tr><td><img class='fit-icon' src='https://image.eveonline.com/Type/"+data.typeID+"_32.png'/></td><td>" + data.typeName + "</td></tr>"
 						//console.log(servicestring)
 						counter++
 						if(counter == arr.length){
