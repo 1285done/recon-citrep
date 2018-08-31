@@ -527,25 +527,24 @@
 		var datastring = ""
 		var counter = 0;
 		moondata.forEach(moon => {
-			$.ajax({
-				url: "https://esi.evetech.net/latest/universe/types/" + moon.id + "/?datasource=tranquility&language=en-us",
+			arrayofores.push($.ajax({
+				url: "/api/orevalue?ore=" + moon.id + "&amount="+ parseFloat((parseFloat(moon.amount * volumeofore).toFixed(0)) / 1/*response1.volume*/).toFixed(0),
 				type: "GET"
-			}).done(function (response1) {
-				arrayofores.push({
-					ore: moon.ore,
-					amount: parseFloat((parseFloat(moon.amount * volumeofore).toFixed(0)) / response1.volume).toFixed(0)
-				});
-				datastring += moon.ore + " " + parseFloat((parseFloat(moon.amount * volumeofore).toFixed(0)) / response1.volume)
-					.toFixed(0) + "^"
-				counter++
-				if (counter == moondata.length) {
-					getEvePraisal(datastring)
-				}
-			})
-
-
-
+			}))
+			//.done(function (response1) {
+			//	arrayofores.push({
+			//		ore: moon.ore,
+			//		amount: parseFloat((parseFloat(moon.amount * volumeofore).toFixed(0)) / response1.volume).toFixed(0)
+			//	});
+		//		datastring += moon.ore + " " + parseFloat((parseFloat(moon.amount * volumeofore).toFixed(0)) / response1.volume)
+		//			.toFixed(0) + "^"
+		//		counter++
+		//		if (counter == moondata.length) {
+		//			getEvePraisal(datastring)
+		//		}
+		//	})
 		})
+		Promise.all(arrayofores, data => {return data}, err => console.log(err))
 		//return datastring
 	}
 

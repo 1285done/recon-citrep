@@ -17,6 +17,7 @@ const form_controller = require('./controllers/form.js')
 const userman_controller = require('./controllers/userman.js')
 const admin_whitelistController = require('./controllers/whitelistcontroller.js')
 const admin_usersController = require('./controllers/userman.js')
+const test_controller = require('./test/index.js')
 
 router.get('/', function (req, res) {
 	//console.log(req);
@@ -61,6 +62,11 @@ router.get('/fa.css', function (req, res) {
 function replaceAll(str, find, replace) {
 	return str.replace(new RegExp(find, 'g'), replace);
 }
+
+router.get('/api/orevalue', function(req, res){
+	console.log(req.query)
+	test_controller.getOreValueByIDAndAmount(req.query.ore, req.query.amount, {zerofill: false}).then(data => {res.send(JSON.stringify(data))})
+})
 
 //Redirect evepraisal call from clientside javascript to server side, return the result.
 router.get('/appraisal.json', function(req, res){
